@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  SqlServerDb:
+    container_name: SqlServerContainer
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    ports:
+        - 8002:1433
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=Password123# 
+
+  parkingmanagementsystem.webapi:
+    container_name: ParkingManagementSystemApis
+    image: ${DOCKER_REGISTRY-}parkingmanagementsystemwebapi
+    ports:
+        - 8003:80
+    build:
+      context: .
+      dockerfile: ParkingManagementSystem.WebAPI/Dockerfile
+    depends_on:
+        - SqlServerDb
